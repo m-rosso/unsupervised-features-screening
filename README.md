@@ -12,5 +12,20 @@ Among the benefits of a variance-based features screening, the most likely to ho
 <br>
 ### Proposed variance-based screening of features
 
-Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares), dos experimentos (70 datasets de classificação binária; 1000 estimações de bootstrap com e sem variance-based screening of features; logistic regression and GBM) dos resultados (média e desvio padrão de performance metrics evaluated on test data, running time). Estrutura do código (data types, etc.).
-$\beta$
+<br>
+<br>
+### Experiments for tests
+In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different datasets for binary classification task provided the empirical background for experiments that take on the following steps:
+1. Selection of high-dimensional datasets (N < p).
+2. Screening of features based on variance (when this procedure is implemented).
+3. Data pre-processing (numerical data transformation, categorical data transformation, assessment and treatment of missing values).
+4. 1000 bootstrap estimations for data modeling using two distinct learning methods: logistic regression and GBM.
+    * Estimations were divided into two: K-folds CV using training data to define hyper-parameters, and train-test estimation to assess performance metrics.
+5. Computation of statistics for performance metrics.
+    * Average and standard deviation over 1000 bootstrap estimations of ROC-AUC, average precision score, and Brier score.
+6. Comparison between statistics with and without features screening, and for different screening options.
+<br>
+<br>
+### Results of tests
+
+Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares), dos resultados (média e desvio padrão de performance metrics evaluated on test data, running time). Estrutura do código (data types, etc.).
