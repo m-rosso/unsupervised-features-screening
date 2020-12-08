@@ -10,15 +10,17 @@ Given the assumption that input variables with higher variance better depict the
 Among the benefits of a variance-based features screening, the most likely to hold is the *reduction in running time*, since less parameters would be estimated (for parametric models) or the learning method would search across a smaller feature space (for non-parametric models). By the exclusion of less relevant features, the noise-to-signal ratio of the model can be reduced, thus improving its ability to generalize. This is specially due to the smaller variance of estimates, which *reduces the variance component of the test error*. Consequently, both the average and the variance of performance metrics can be improved by a relatively costless procedure of features selection.
 <br>
 
-### Proposed variance-based screening of features
-It starts with the descendent sorting of features according to their variances. Then, from all *p* original features, only those *p* < p* with the highest variances are selected.
-Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares).
-<br>
-
 ### Data types
 It is crucial to stress that two distinct screening procedures should be available: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
 <br>
 Concerning data types for implementing the code, it was constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
+<br>
+
+### Proposed variance-based screening of features
+It starts with the descendent sorting of features according to their variances calculated on the training data. Then, from all *p* original features, only those *p* < p* with the highest variances are selected. This default implementation can be improved by data pre-processing operations that refine the screening of features. The following alternatives were developed:
+* Winsorized data: replaces values below and above the percentile of d% and (1 - d)% by this values, respectively. This works to attenuate the influence of extreme values that may distort the variance calculation.
+* Drop of outliers: directly removes outliers from the sample previous to the variance calculation.
+* Multicollinearity filter: after sorting numerical variables in a descendent order according to their variances, an input *X*  is only selected if its correlation with previously selected inputs is below a given threshold. This correlation is calculated by regressing the candidate input against all previously selected inputs, and then by measuring the R2 coefficient. If R2 < thres, then X can be selected. The procedure continues as long as the number of selected inputs is smaller than *p**.
 <br>
 
 ### Experiments for tests
