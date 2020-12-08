@@ -14,8 +14,15 @@ Among the benefits of a variance-based features screening, the most likely to ho
 
 <br>
 <br>
+### Data types
+It is crucial to stress that two distinct screening procedures should be performed: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
+<br>
+For the sake of easiness of development, codes are constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
+<br>
+<br>
 ### Experiments for tests
 In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different datasets for binary classification task provided the empirical background for experiments that take on the following steps:
+<br>
 1. Selection of high-dimensional datasets (N < p).
 <br>
 2. Screening of features based on variance (when this procedure is implemented).
@@ -33,5 +40,6 @@ In order to assess the impacts on performance metrics and running time of unsupe
 <br>
 <br>
 ### Results of tests
-
-Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares), dos resultados (média e desvio padrão de performance metrics evaluated on test data, running time). Estrutura do código (data types, etc.).
+* The variance-based unsupervised screening of features has improved the predictive accuracy of logistic regression models. An estimation time reduced by a factor of 4 is another advantage of the procedure proposed here to deal with high-dimensionality.
+* Even that the implemenation of unsupervised screening of features has not make GBMs generalize better on average, these models have significantly more stable performances with the reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
+Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares).
