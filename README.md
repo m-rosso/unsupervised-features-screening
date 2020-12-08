@@ -17,12 +17,18 @@ Among the benefits of a variance-based features screening, the most likely to ho
 ### Experiments for tests
 In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different datasets for binary classification task provided the empirical background for experiments that take on the following steps:
 1. Selection of high-dimensional datasets (N < p).
+<br>
 2. Screening of features based on variance (when this procedure is implemented).
+<br>
 3. Data pre-processing (numerical data transformation, categorical data transformation, assessment and treatment of missing values).
+<br>
 4. 1000 bootstrap estimations for data modeling using two distinct learning methods: logistic regression and GBM.
+<br>
     * Estimations were divided into two: K-folds CV using training data to define hyper-parameters, and train-test estimation to assess performance metrics.
+<br>
 5. Computation of statistics for performance metrics.
     * Average and standard deviation over 1000 bootstrap estimations of ROC-AUC, average precision score, and Brier score.
+<br>
 6. Comparison between statistics with and without features screening, and for different screening options.
 <br>
 <br>
