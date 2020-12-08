@@ -15,12 +15,14 @@ Among the benefits of a variance-based features screening, the most likely to ho
 
 <br>
 <br>
+
 ### Data types
 It is crucial to stress that two distinct screening procedures should be performed: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
 <br>
 For the sake of easiness of development, codes are constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
 <br>
 <br>
+
 ### Experiments for tests
 In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different datasets for binary classification task provided the empirical background for experiments that take on the following steps:
 <br>
