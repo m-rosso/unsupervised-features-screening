@@ -11,20 +11,20 @@ Among the benefits of a variance-based features screening, the most likely to ho
 <br>
 
 ### Proposed variance-based screening of features
-
+It starts with the descendent sorting of features according to their variances. Then, from all *p* original features, only those *p* < p* with the highest variances are selected.
+Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares).
 <br>
 
 ### Data types
-It is crucial to stress that two distinct screening procedures should be performed: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
+It is crucial to stress that two distinct screening procedures should be available: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
 <br>
-For the sake of easiness of development, codes are constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
+Concerning data types for implementing the code, it was constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
 <br>
 
 ### Experiments for tests
-In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different high-dimensional datasets (N < p) for binary classification task provided the empirical background for experiments. Then, with and without the implementation of variance-based features sreening, 1000 bootstrap estimations were conducted for data modeling using two distinct learning methods (logistic regression and GBM). Finally, the computation of statistics for performance metrics guided conclusions towards different screening options.
+In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different high-dimensional datasets (N < p) for binary classification task provided the empirical background for experiments. Then, with and without the implementation of variance-based features screening, 1000 bootstrap estimations were conducted for data modeling using two distinct learning methods (logistic regression and GBM). Finally, the computation of statistics for performance metrics guided conclusions towards different screening options.
 <br>
 
 ### Results of tests
 * The variance-based unsupervised screening of features has improved the predictive accuracy of logistic regression models. An estimation time reduced by a factor of 4 is another advantage of the procedure proposed here to deal with high-dimensionality.
 * Even that the implemenation of unsupervised screening of features has not make GBMs generalize better on average, these models have significantly more stable performances with the reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
-Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares).
