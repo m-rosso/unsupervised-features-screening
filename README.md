@@ -13,3 +13,4 @@ Among the benefits of a variance-based features screening, the most likely to ho
 ### Proposed variance-based screening of features
 
 Prévia da estrutura (ordenamento decrescente das variáveis de acordo com a sua variância, opções de especificação - remoção de outliers, winsorized data, filtro para variáveis colineares), dos experimentos (70 datasets de classificação binária; 1000 estimações de bootstrap com e sem variance-based screening of features; logistic regression and GBM) dos resultados (média e desvio padrão de performance metrics evaluated on test data, running time). Estrutura do código (data types, etc.).
+$\beta$
