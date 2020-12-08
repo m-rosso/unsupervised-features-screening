@@ -18,7 +18,7 @@ Concerning data types for implementing the code, it was constructed upon Numpy a
 
 ### Proposed variance-based screening of features
 It starts with the descendent sorting of features according to their variances calculated on the training data. Then, from all *p* original features, only those *p* < p* with the highest variances are selected. This default implementation can be improved by data pre-processing operations that refine the screening of features. The following alternatives were developed:
-* Winsorized data: replaces values below and above the percentile of d% and (1 - d)% by this values, respectively. This works to attenuate the influence of extreme values that may distort the variance calculation.
+* Winsorized data: replaces values below and above the percentile of d% and (1 - d)% by these values, respectively. This works to attenuate the influence of extreme values that may distort the variance calculation.
 * Drop of outliers: directly removes outliers from the sample previous to the variance calculation.
 * Multicollinearity filter: after sorting numerical variables in a descendent order according to their variances, an input *X*  is only selected if its correlation with previously selected inputs is below a given threshold. This correlation is calculated by regressing the candidate input against all previously selected inputs, and then by measuring the R2 coefficient. If R2 < thres, then X can be selected. The procedure continues as long as the number of selected inputs is smaller than *p**.
 <br>
@@ -30,3 +30,5 @@ In order to assess the impacts on performance metrics and running time of unsupe
 ### Results of tests
 * The variance-based unsupervised screening of features has improved the predictive accuracy of logistic regression models. An estimation time reduced by a factor of 4 is another advantage of the procedure proposed here to deal with high-dimensionality.
 * Even that the implemenation of unsupervised screening of features has not make GBMs generalize better on average, these models have significantly more stable performances with the reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
+
+### Contents of this repository
