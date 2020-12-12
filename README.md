@@ -32,5 +32,5 @@ In order to assess the impacts on performance metrics and running time of unsupe
 * Even that the implemenation of unsupervised screening of features has not make *GBMs* generalize better on average, these models have significantly more stable performances with a reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
 
 ### Contents of this repository
-* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features.
+* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features. Besides, it also presents a HTML file with demonstration.
 * Folder *Results*: presents HTML files with more discussion on the screening of features and with the results of tests.
