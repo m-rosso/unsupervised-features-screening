@@ -1,0 +1,30 @@
+{
+  "classes": {
+    "files_management": [
+      "json",
+      "os"
+    ],
+    "data_processing": [
+      "pandas",
+      "numpy"
+    ],
+    "utils": [
+      "datetime",
+      "time",
+      "progressbar"
+    ],
+    "statistical_learning": [
+      "sklearn"
+    ]
+  },
+  "versions": {
+    "pandas": "0.25.1",
+    "numpy": "1.17.2",
+    "json": "2.0.9",
+    "os": "module 'os' has no attribute '__version__'",
+    "datetime": "module 'datetime' has no attribute '__version__'",
+    "time": "module 'time' has no attribute '__version__'",
+    "progressbar": "3.53.1",
+    "sklearn": "0.21.3"
+  }
+}

@@ -1,0 +1,5 @@
+pandas==0.25.1
+numpy==1.17.2
+json==2.0.9
+progressbar==3.53.1
+sklearn==0.21.3
