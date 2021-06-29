@@ -11,7 +11,7 @@ Among the benefits of a variance-based features screening, the most likely to ho
 <br>
 
 ### Data types
-It is crucial to stress that two distinct screening procedures should be available: one for numerical and other for categorical data, given expected differences in the level of variances for these data types.
+It is crucial to stress that two distinct screening procedures is available: one for numerical and other for categorical data, where the last one covers only variance thresholding.
 <br>
 Concerning data types for implementing the code, it was constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
 <br>
@@ -23,6 +23,8 @@ It starts with the descendent sorting of features according to their variances c
 * **Multicollinearity filter:** after sorting numerical variables in a descendent order according to their variances, an input *X*  is only selected if its correlation with previously selected inputs is below a given threshold. This correlation is calculated by regressing the candidate input against all previously selected inputs, and then by measuring the R2 coefficient. If R2 < thres, then X can be selected. The procedure continues as long as the number of selected inputs is smaller than *p**.
 <br>
 
+* **Variance thresholding**: another possibility covered by the developed class is the variance thresholding, where instead of defining the number of features to be selected, only variables with variance higher than a threshold will be selected.
+
 ### Experiments for tests
 In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different high-dimensional datasets (N < p) for binary classification task provided the empirical background for experiments. Then, with and without the implementation of variance-based features screening, 1000 bootstrap estimations were conducted for data modeling using two distinct learning methods (logistic regression and GBM). Finally, the computation of statistics for performance metrics guided conclusions towards different screening options.
 <br>
@@ -32,5 +34,5 @@ In order to assess the impacts on performance metrics and running time of unsupe
 * Even that the implemenation of unsupervised screening of features has not make *GBMs* generalize better on average, these models have significantly more stable performances with a reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
 
 ### Contents of this repository
-* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features. Besides, it also presents a HTML file with demonstration.
+* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features. Besides, it also presents a HTML file with demonstration. *Mainly, the module screening_features presents the classes VarScreeningNumerical and VarScreeningCategorical for applying features selection based on variance, for both numerical and categorical data, respectively*.
 * Folder *Results*: presents HTML files with more discussion on the screening of features and with the results of tests.
