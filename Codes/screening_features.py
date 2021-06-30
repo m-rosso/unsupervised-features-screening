@@ -16,6 +16,7 @@ from sklearn.linear_model import LinearRegression
 ####################################################################################################################################
 # Class for screening continuous features based on variation criteria:
 
+# Class for screening continuous features:
 class VarScreeningNumerical(object):
     """
     Arguments for initialization:
@@ -44,8 +45,8 @@ class VarScreeningNumerical(object):
         'var_continuous_feat': dataframe with variance on training data by numerical variable.
     """
     def __init__(self, features,
-                 select_k=True, k=None, thresholding=False, variance_threshold=0,
                  na_features=[], stat='variance',
+                 select_k=True, k=None, thresholding=False, variance_threshold=0,
                  winsorize=False, winsorize_param=0.025, drop_outliers=False, drop_outliers_param=0.01,
                  collinearity=False, collinearity_param=0.9):
         self.features = features
@@ -62,9 +63,21 @@ class VarScreeningNumerical(object):
         self.drop_outliers_param = drop_outliers_param
         self.collinearity = collinearity
         self.collinearity_param = collinearity_param
+        self.variance_threshold = variance_threshold
         
     # Method that implements the screening of features based on variance:
     def select_feat(self, data):
+        # Calculating the variability of each feature:
+        data = data.copy()
+        self.__process_data(data=data)
+        
+        if self.select_k:
+            self.__select_k_feats(data=data)
+        
+        if self.thresholding:
+            self.__thresholding_selection(data=data)
+        
+    def __process_data(self, data):
         # Variance by feature:
         if self.stat == 'coef_variation':
             var_continuous_feat = pd.DataFrame(data={'feature': list(self.features),
@@ -105,12 +118,6 @@ class VarScreeningNumerical(object):
                 perc_sup = np.quantile(data[f], q=(1-self.drop_outliers_param))
                 
                 data[f] = data[f].apply(lambda x: x if (x < perc_sup) & (x > perc_inf) else np.NaN)
-        
-        if self.select_k:
-            self.__select_k_feats(data=data)
-        
-        if self.thresholding:
-            self.__thresholding_selection(data=data)
         
     # Method that selects those features with the K highest variability:
     def __select_k_feats(self, data):
@@ -190,8 +197,8 @@ class VarScreeningNumerical(object):
             print('-------------------------------------------------------------------------')
             print('\n')
 
-    # Function that returns the coefficient of variation for a numerical variable:
     @staticmethod
+    # Function that returns the coefficient of variation for a numerical variable:
     def coef_variation(data):
         """
         Arguments:
@@ -253,3 +260,52 @@ class VarScreeningCategorical(object):
 
             # Dataframe with dummy variables for all categorical features:
             self.dummies = pd.concat([self.dummies, dummies_cat], axis=1)
+
+####################################################################################################################################
+# Class for screening continuous features based on correlation criteria:
+
+class CorrScreeningNumerical(VarScreeningNumerical):
+    """
+    Arguments for initialization:
+        'features': list with names of numerical variables.
+        'na_features': list with dummies for missing value status (optional).
+        'stat': statistic for computing variability of a numerical variable. Choose among 'variance' and 'coefficient of variation',
+        the ratio between standard deviation and mean.
+        'corr_thresold': (absolute) correlation above which a feature is disregarded from the selection.
+        'winsorize': boolean indicating whether to use winsorized data or not.
+        'winsorize_param': float (between 0 and 1) for the percentile to winsorize data.
+        'drop_outliers': boolean indicating whether to drop outliers previously to variance calculation.
+        'drop_outliers_param': float (between 0 and 1) for the percentile to drop outliers.
+    Methods:
+        'select_feat': for a given dataframe ('data'), performs selection of numerical variables based on correlation
+        criterium and using parameters passed during initialization.
+    Output objects:
+        'features': list of numerical variables for selection.
+        'selected_feat': list with names of selected features.
+        'no_var_continuous_feat': list with names of features with zero variance.
+        'var_continuous_feat': dataframe with variance on training data by numerical variable.
+    """
+    def __init__(self, features, na_features=[], corr_thresold=0.8, stat='variance',
+                 winsorize=False, winsorize_param=0.025, drop_outliers=False, drop_outliers_param=0.01):
+        self.features = features
+        self.na_features = na_features
+        self.stat = stat
+        self.corr_thresold = corr_thresold
+        self.winsorize = winsorize
+        self.winsorize_param = winsorize_param
+        self.drop_outliers = drop_outliers
+        self.drop_outliers_param = drop_outliers_param
+        
+    def select_feat(self, data):
+        # Calculating the variability of each feature:
+        data = data.copy()
+        self._VarScreeningNumerical__process_data(data=data)
+        self.selected_feat = list(self.var_continuous_feat['feature'])
+
+        # Loop over features:
+        for sel_var in self.selected_feat:
+            # Loop over candidate features:
+            for candidate_var in [f for f in self.selected_feat if f!=sel_var]:
+                # Checking if the correlation exceeds the predefined threshold:
+                if abs(np.corrcoef(data[sel_var], data[candidate_var])[1,0]) > self.corr_thresold:
+                    self.selected_feat.pop(self.selected_feat.index(candidate_var))
