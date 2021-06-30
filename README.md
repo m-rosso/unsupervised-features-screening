@@ -24,6 +24,7 @@ It starts with the descendent sorting of features according to their variances c
 <br>
 
 * **Variance thresholding**: another possibility covered by the developed class is the variance thresholding, where instead of defining the number of features to be selected, only variables with variance higher than a threshold will be selected.
+* **Selection based on correlation:** it is also possible to select features without looking into the relationship between inputs and outputs by disregarding features with excessive (linear) correlation with other features. This is also done here by making use of the class *CorrScreeningNumerical*, which sorts features based on their variances and then calculates the correlation of successive pairs of variables, always dropping variables with excessive correlation with the features with the highest variances.
 
 ### Experiments for tests
 In order to assess the impacts on performance metrics and running time of unsupervised screening of features based on variance, 70 different high-dimensional datasets (N < p) for binary classification task provided the empirical background for experiments. Then, with and without the implementation of variance-based features screening, 1000 bootstrap estimations were conducted for data modeling using two distinct learning methods (logistic regression and GBM). Finally, the computation of statistics for performance metrics guided conclusions towards different screening options.
@@ -34,5 +35,5 @@ In order to assess the impacts on performance metrics and running time of unsupe
 * Even that the implemenation of unsupervised screening of features has not make *GBMs* generalize better on average, these models have significantly more stable performances with a reduced model complexity. The reduction on expected running time is a key contribution to GBMs, since they usually take a long time to be estimated.
 
 ### Contents of this repository
-* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features. Besides, it also presents a HTML file with demonstration. *Mainly, the module screening_features presents the classes VarScreeningNumerical and VarScreeningCategorical for applying features selection based on variance, for both numerical and categorical data, respectively*.
+* Folder *Codes*: contains Python scripts for running tests and to implement the proposed variance-based screening of features. Besides, it also presents a HTML file with demonstration. *Mainly, the module screening_features presents the classes VarScreeningNumerical, VarScreeningCategorical and CorrScreeningNumerical for applying features selection based on variance, for both numerical and categorical data, respectively*.
 * Folder *Results*: presents HTML files with more discussion on the screening of features and with the results of tests.
