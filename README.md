@@ -11,13 +11,13 @@ Among the benefits of a variance-based features screening, the most likely to ho
 <br>
 
 ### Data types
-It is crucial to stress that two distinct screening procedures is available: one for numerical and other for categorical data, where the last one covers only variance thresholding.
+It is crucial to stress that two distinct screening procedures is available: one for numerical (*VarScreeningNumerical*) and other for categorical data (*VarScreeningCategorical*), where the last one covers only variance thresholding.
 <br>
 Concerning data types for implementing the code, it was constructed upon Numpy and Pandas libraries, instead of just Numpy. This makes implementation dependent on converting data structure into dataframes, instead of more general possibilities. No complex modifications would be necessary to generalize the data structure, and nothing that would change results.
 <br>
 
 ### Proposed variance-based screening of features
-It starts with the descendent sorting of features according to their variances calculated on the training data. Then, from all *p* original features, only those *p* < p* with the highest variances are selected. This default implementation can be improved by data pre-processing operations that refine the screening of features. The following alternatives were developed:
+It starts with the descendent sorting of features according to their variances calculated on the training data. Then, from all *p* original features, only those *p* < p* with the highest variances are selected. This default implementation can be improved by data pre-processing operations that refine the screening of features. The following alternatives were developed and are covered by the class *VarScreeningNumerical*:
 * **Winsorized data:** replaces values below and above the percentile of d% and (1 - d)% by these values, respectively. This works to attenuate the influence of extreme values that may distort the variance calculation.
 * **Drop of outliers:** directly removes outliers from the sample previous to the variance calculation.
 * **Multicollinearity filter:** after sorting numerical variables in a descendent order according to their variances, an input *X*  is only selected if its correlation with previously selected inputs is below a given threshold. This correlation is calculated by regressing the candidate input against all previously selected inputs, and then by measuring the R2 coefficient. If R2 < thres, then X can be selected. The procedure continues as long as the number of selected inputs is smaller than *p**.
