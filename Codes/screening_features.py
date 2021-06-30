@@ -16,9 +16,16 @@ from sklearn.linear_model import LinearRegression
 ####################################################################################################################################
 # Class for screening continuous features based on variation criteria:
 
-# Class for screening continuous features:
 class VarScreeningNumerical(object):
     """
+    Class for screening continuous features based on variation criteria.
+
+    The main method of this class, 'select_feat', can pre-process data by treating outliers (either by dropping them or using
+    winsorized data). Then, it calculates some variability measure (variance or coefficient of variation) for each feature and sorts
+    them descendently according to their variability. Finally, a selection of features is made by picking only those 'k' variables
+    with the highest variability or only those with variability larger than some threshold. It returns, in addition to other
+    attributes, a list with the name of selected features.
+
     Arguments for initialization:
         'features': list with names of numerical variables.
         'na_features': list with dummies for missing value status (optional).
@@ -68,8 +75,7 @@ class VarScreeningNumerical(object):
     # Method that implements the screening of features based on variance:
     def select_feat(self, data):
         # Calculating the variability of each feature:
-        data = data.copy()
-        self.__process_data(data=data)
+        data = self.__process_data(data=data)
         
         if self.select_k:
             self.__select_k_feats(data=data)
@@ -78,7 +84,7 @@ class VarScreeningNumerical(object):
             self.__thresholding_selection(data=data)
         
     def __process_data(self, data):
-        # Variance by feature:
+        # Variability by feature:
         if self.stat == 'coef_variation':
             var_continuous_feat = pd.DataFrame(data={'feature': list(self.features),
                                                      'variation': [self.coef_variation(data[f]) for f in
@@ -101,23 +107,25 @@ class VarScreeningNumerical(object):
         self.var_continuous_feat = var_continuous_feat.sort_values('variation', ascending=False)
         self.var_continuous_feat.columns.name = self.stat
         
-        data = data.copy()
+        transf_data = data.copy()
         
         # Winsorizing data:
         if self.winsorize:    
             for f in self.features:
-                delta_neg = np.quantile(data[f], q=self.winsorize_param)
-                delta_pos = np.quantile(data[f], q=(1-self.winsorize_param))
+                delta_neg = np.quantile(transf_data[f], q=self.winsorize_param)
+                delta_pos = np.quantile(transf_data[f], q=(1-self.winsorize_param))
 
-                data[f] = data[f].apply(lambda x: min([delta_pos, max([delta_neg, x])]))
+                transf_data[f] = transf_data[f].apply(lambda x: min([delta_pos, max([delta_neg, x])]))
         
         # Dropping outliers:
         if self.drop_outliers:
             for f in self.features:
-                perc_inf = np.quantile(data[f], q=self.drop_outliers_param)
-                perc_sup = np.quantile(data[f], q=(1-self.drop_outliers_param))
+                perc_inf = np.quantile(transf_data[f], q=self.drop_outliers_param)
+                perc_sup = np.quantile(transf_data[f], q=(1-self.drop_outliers_param))
                 
-                data[f] = data[f].apply(lambda x: x if (x < perc_sup) & (x > perc_inf) else np.NaN)
+                transf_data[f] = transf_data[f].apply(lambda x: x if (x < perc_sup) & (x > perc_inf) else np.NaN)
+        
+        return transf_data
         
     # Method that selects those features with the K highest variability:
     def __select_k_feats(self, data):
@@ -218,6 +226,12 @@ class VarScreeningNumerical(object):
 
 class VarScreeningCategorical(object):
     """
+    Class for screening categorical features.
+
+    The main method of this class, 'select_feat', proceeds to the one-hot encoding for coverting categorical attributes into numerical
+    variables. Then, it drops those binary variables whose variance is smaller than some predefined threshold. The main outcome is a
+    dataframe with selected binary variables extracted from the inserted categorical data.
+
     Arguments for initialization:
         'features': list of categorical features whose categories should be selected.
         'variance_param': parameter for selection based on the variance of a given dummy variable.
@@ -266,6 +280,13 @@ class VarScreeningCategorical(object):
 
 class CorrScreeningNumerical(VarScreeningNumerical):
     """
+    Class for screening continuous features based on correlation criteria.
+
+    By using the method 'select_feat' of this class, one can pre-process data previous to the selection based on correlation. Mainly,
+    it sorts data descendently according to their variability and then iteratively calculates the correlation between the feature with
+    the highest variance and the remaining variables, always dropping those whose correlation is higher than some threshold. By doing
+    so, from pairs of highly correlated variables, those features with less variance is disregarded.
+
     Arguments for initialization:
         'features': list with names of numerical variables.
         'na_features': list with dummies for missing value status (optional).
@@ -298,14 +319,13 @@ class CorrScreeningNumerical(VarScreeningNumerical):
         
     def select_feat(self, data):
         # Calculating the variability of each feature:
-        data = data.copy()
-        self._VarScreeningNumerical__process_data(data=data)
+        transf_data = self._VarScreeningNumerical__process_data(data=data)
         self.selected_feat = list(self.var_continuous_feat['feature'])
 
         # Loop over features:
-        for sel_var in self.selected_feat:
+        for sel_var in self.selected_feat:            
             # Loop over candidate features:
             for candidate_var in [f for f in self.selected_feat if f!=sel_var]:
                 # Checking if the correlation exceeds the predefined threshold:
-                if abs(np.corrcoef(data[sel_var], data[candidate_var])[1,0]) > self.corr_thresold:
+                if abs(np.corrcoef(transf_data[sel_var], transf_data[candidate_var])[1,0]) > self.corr_thresold:
                     self.selected_feat.pop(self.selected_feat.index(candidate_var))
